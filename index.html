@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CIT 1st Year Portal | DAE CIT 2026</title>
+    <meta name="theme-color" content="#0a0f1d">
+    <meta name="description" content="Official Student Portal & Live Class Schedule for DAE Computer Information Technology (1st Year)">
+    
+    <!-- PWA Web App Manifest (Data URL format for single-file deployment) -->
+    <link rel="manifest" href='data:application/manifest+json,{
+        "name": "CIT 1st Year Portal",
+        "short_name": "CIT Portal",
+        "description": "DAE CIT 1st Year Student Portal & Live Timetable",
+        "start_url": "./",
+        "display": "standalone",
+        "background_color": "#0a0f1d",
+        "theme_color": "#0a0f1d",
+        "icons": [
+            {
+                "src": "https://img.icons8.com/neon/512/experimental-laptop-coding-neon.png",
+                "sizes": "512x512",
+                "type": "image/png",
+                "purpose": "any maskable"
+            }
+        ]
+    }'>
+
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-dark: #0a0f1d;
+            --bg-card: rgba(18, 25, 44, 0.75);
+            --bg-card-hover: rgba(28, 38, 66, 0.85);
+            --cyan-glow: #00f0ff;
+            --purple-glow: #7000ff;
+            --emerald-glow: #00ff9d;
+            --amber-glow: #ffb703;
+            --rose-glow: #ff0055;
+            --text-main: #f0f4f8;
+            --text-muted: #8a99ad;
+            --border-glow: rgba(0, 240, 255, 0.25);
+            --border-subtle: rgba(255, 255, 255, 0.08);
+            --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+            --font-mono: 'Fira Code', monospace;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            font-family: var(--font-sans);
+            line-height: 1.6;
+            background-image: 
+                radial-gradient(circle at 15% 15%, rgba(112, 0, 255, 0.12) 0%, transparent 40%),
+                radial-gradient(circle at 85% 85%, rgba(0, 240, 255, 0.12) 0%, transparent 40%);
+            background-attachment: fixed;
+            min-height: 100vh;
+            padding-bottom: 3rem;
+        }
+
+        /* Glassmorphic Navigation Bar */
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            background: rgba(10, 15, 29, 0.85);
+            border-bottom: 1px solid var(--border-subtle);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .brand-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 800;
+            font-size: 1.25rem;
+            color: var(--text-main);
+            text-decoration: none;
+            letter-spacing: -0.5px;
+        }
+
+        .brand-badge {
+            background: linear-gradient(135deg, var(--cyan-glow), var(--purple-glow));
+            color: #000;
+            font-size: 0.75rem;
+            font-weight: 800;
+            padding: 0.25rem 0.6rem;
+            border-radius: 6px;
+            font-family: var(--font-mono);
+        }
+
+        .nav-controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .install-btn {
+            background: linear-gradient(135deg, var(--cyan-glow), var(--purple-glow));
+            color: #000;
+            border: none;
+            padding: 0.5rem 1rem;
+            font-weight: 700;
+            font-size: 0.85rem;
+            border-radius: 8px;
+            cursor: pointer;
+            display: none;
+            align-items: center;
+            gap: 0.5rem;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .install-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 15px rgba(0, 240, 255, 0.4);
+        }
+
+        /* Main Layout */
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+        }
+
+        .hero-panel {
+            background: var(--bg-card);
+            border: 1px solid var(--border-glow);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-panel::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--cyan-glow), var(--purple-glow), var(--emerald-glow));
+        }
+
+        .status-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .live-clock {
+            font-family: var(--font-mono);
+            font-size: 1.1rem;
+            color: var(--cyan-glow);
+            background: rgba(0, 240, 255, 0.1);
+            padding: 0.4rem 0.8rem;
+            border-radius: 8px;
+            border: 1px solid rgba(0, 240, 255, 0.3);
+        }
+
+        /* Active Class Card */
+        .active-class-box {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--border-subtle);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .live-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--emerald-glow);
+            font-weight: 700;
+            font-size: 0.85rem;
+            font-family: var(--font-mono);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
+        }
+
+        .live-dot {
+            width: 8px;
+            height: 8px;
+            background-color: var(--emerald-glow);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--emerald-glow);
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.4; transform: scale(1.3); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        /* Weekday Tabs */
+        .day-tabs {
+            display: flex;
+            gap: 0.5rem;
+            overflow-x: auto;
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .day-tab {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            color: var(--text-muted);
+            padding: 0.6rem 1.2rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .day-tab:hover {
+            border-color: var(--border-glow);
+            color: var(--text-main);
+        }
+
+        .day-tab.active {
+            background: linear-gradient(135deg, rgba(0, 240, 255, 0.2), rgba(112, 0, 255, 0.2));
+            border-color: var(--cyan-glow);
+            color: var(--cyan-glow);
+        }
+
+        /* Timetable Cards Grid */
+        .timetable-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.25rem;
+            margin-bottom: 3rem;
+        }
+
+        .period-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 12px;
+            padding: 1.25rem;
+            position: relative;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+
+        .period-card:hover {
+            transform: translateY(-3px);
+            border-color: var(--border-glow);
+            background: var(--bg-card-hover);
+        }
+
+        .period-card.is-current {
+            border-color: var(--emerald-glow);
+            box-shadow: 0 0 15px rgba(0, 255, 157, 0.15);
+        }
+
+        .period-time {
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            color: var(--cyan-glow);
+            margin-bottom: 0.5rem;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .period-code {
+            font-family: var(--font-mono);
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--text-main);
+        }
+
+        .period-title {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .period-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            padding-top: 0.75rem;
+            border-top: 1px solid var(--border-subtle);
+            color: var(--text-muted);
+        }
+
+        .room-badge {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-family: var(--font-mono);
+        }
+
+        /* Subjects Section Table */
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .subject-table-container {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 12px;
+            overflow-x: auto;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        th {
+            background: rgba(0, 0, 0, 0.4);
+            color: var(--cyan-glow);
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            padding: 1rem;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border-subtle);
+            font-size: 0.9rem;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover td {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .code-tag {
+            font-family: var(--font-mono);
+            font-weight: 600;
+            color: var(--amber-glow);
+        }
+
+        /* Responsive Settings */
+        @media (max-width: 768px) {
+            header { padding: 0.8rem 1rem; }
+            .container { padding: 0 1rem; }
+            .hero-panel { padding: 1.25rem; }
+            .timetable-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Navigation -->
+    <header>
+        <a href="#" class="brand-logo">
+            <span class="brand-badge">CIT</span>
+            1st Year Portal
+        </a>
+        <div class="nav-controls">
+            <button id="installAppBtn" class="install-btn">
+                <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                    <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
+                    <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>
+                </svg>
+                Install App
+            </button>
+        </div>
+    </header>
+
+    <div class="container">
+        
+        <!-- Live Status Hero Box -->
+        <div class="hero-panel">
+            <div class="status-header">
+                <div>
+                    <h2>DAE CIT Session 2025–2026</h2>
+                    <p style="color: var(--text-muted); font-size: 0.9rem;">Department of Computer Information Technology</p>
+                </div>
+                <div class="live-clock" id="liveClock">00:00:00 AM</div>
+            </div>
+
+            <div class="active-class-box" id="liveClassBox">
+                <div class="live-tag">
+                    <span class="live-dot"></span>
+                    Current Period Status
+                </div>
+                <h3 id="liveSubjectTitle" style="font-size: 1.2rem; margin-bottom: 0.25rem;">Checking timetable schedule...</h3>
+                <p id="liveSubjectDetails" style="color: var(--text-muted); font-size: 0.85rem;">Calculating active class status based on current time...</p>
+            </div>
+        </div>
+
+        <!-- Timetable Navigation & Grid -->
+        <div class="section-title">
+            <span>📅</span> Weekly Class Schedule
+        </div>
+
+        <div class="day-tabs" id="dayTabs">
+            <button class="day-tab" data-day="Monday">Monday</button>
+            <button class="day-tab" data-day="Tuesday">Tuesday</button>
+            <button class="day-tab" data-day="Wednesday">Wednesday</button>
+            <button class="day-tab" data-day="Thursday">Thursday</button>
+            <button class="day-tab" data-day="Friday">Friday</button>
+            <button class="day-tab" data-day="Saturday">Saturday</button>
+        </div>
+
+        <div class="timetable-grid" id="timetableGrid">
+            <!-- Dynamic Period Cards Rendered via JS -->
+        </div>
+
+        <!-- Subjects & Course Directory -->
+        <div class="section-title">
+            <span>📚</span> 1st Year Course Directory
+        </div>
+
+        <div class="subject-table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Course Code</th>
+                        <th>Subject Name</th>
+                        <th>T - P - C</th>
+                        <th>Instructor / Lab</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="code-tag">CIT 114</td>
+                        <td>Introduction to Computer Applications</td>
+                        <td>1 - 9 - 4</td>
+                        <td>Computer Lab 1</td>
+                    </tr>
+                    <tr>
+                        <td class="code-tag">CIT 124</td>
+                        <td>Programming Fundamentals (C/C++)</td>
+                        <td>2 - 6 - 4</td>
+                        <td>Software Lab 2</td>
+                    </tr>
+                    <tr>
+                        <td class="code-tag">CIT 141</td>
+                        <td>Computer Application Software</td>
+                        <td>0 - 3 - 1</td>
+                        <td>IT Lab 3</td>
+                    </tr>
+                    <tr>
+                        <td class="code-tag">CIT 103</td>
+                        <td>Basic Electronics & Circuit Fundamentals</td>
+                        <td>2 - 3 - 3</td>
+                        <td>Electronics Hardware Lab</td>
+                    </tr>
+                    <tr>
+                        <td class="code-tag">Math 123</td>
+                        <td>Applied Mathematics-I</td>
+                        <td>3 - 0 - 3</td>
+                        <td>Lecture Hall A</td>
+                    </tr>
+                    <tr>
+                        <td class="code-tag">PHY 132</td>
+                        <td>Applied Physics</td>
+                        <td>1 - 3 - 2</td>
+                        <td>Physics Science Lab</td>
+                    </tr>
+                    <tr>
+                        <td class="code-tag">ENG 112</td>
+                        <td>English & Communication Skills</td>
+                        <td>2 - 0 - 2</td>
+                        <td>Lecture Hall B</td>
+                    </tr>
+                    <tr>
+                        <td class="code-tag">ISL 101 / PST 101</td>
+                        <td>Islamic Studies / Pakistan Studies</td>
+                        <td>1 - 0 - 1</td>
+                        <td>Main Auditorium</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+    <!-- Application Script Engine -->
+    <script>
+        // --- 1. PWA Service Worker Inline Setup ---
+        if ('serviceWorker' in navigator) {
+            const swCode = `
+                const CACHE_NAME = 'cit-portal-v1';
+                self.addEventListener('install', (e) => {
+                    e.waitUntil(
+                        caches.open(CACHE_NAME).then((cache) => {
+                            return cache.addAll(['./']);
+                        })
+                    );
+                });
+                self.addEventListener('fetch', (e) => {
+                    e.respondWith(
+                        caches.match(e.request).then((res) => res || fetch(e.request))
+                    );
+                });
+            `;
+            const blob = new Blob([swCode], { type: 'application/javascript' });
+            const swUrl = URL.createObjectURL(blob);
+            
+            navigator.serviceWorker.register(swUrl)
+                .then(() => console.log('PWA Service Worker Registered Successfully'))
+                .catch((err) => console.log('Service Worker Registration Failed:', err));
+        }
+
+        // --- 2. PWA Install Prompt Handler ---
+        let deferredPrompt;
+        const installBtn = document.getElementById('installAppBtn');
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            installBtn.style.display = 'inline-flex';
+        });
+
+        installBtn.addEventListener('click', async () => {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                if (outcome === 'accepted') {
+                    installBtn.style.display = 'none';
+                }
+                deferredPrompt = null;
+            }
+        });
+
+        // --- 3. Timetable Master Data Matrix ---
+        const scheduleData = {
+            Regular: [
+                { start: "08:00", end: "08:50", code: "Math 123", title: "Applied Mathematics-I", room: "Hall A", teacher: "Prof. Math Dept" },
+                { start: "08:50", end: "09:40", code: "CIT 124", title: "Programming Fundamentals", room: "Soft Lab 2", teacher: "Engr. CIT Dept" },
+                { start: "09:40", end: "10:30", code: "CIT 103", title: "Basic Electronics", room: "Hardware Lab", teacher: "Lab Instructor" },
+                { start: "10:30", end: "11:00", code: "BREAK", title: "Refreshment / Recess", room: "Campus Canteen", teacher: "-" },
+                { start: "11:00", end: "11:50", code: "CIT 114", title: "Computer Applications Practical", room: "Comp Lab 1", teacher: "Lab Asst" },
+                { start: "11:50", end: "12:40", code: "PHY 132", title: "Applied Physics", room: "Physics Lab", teacher: "Prof. Physics" },
+                { start: "12:40", end: "01:30", code: "ENG 112", title: "English & Communication", room: "Hall B", teacher: "Dept of Humanities" }
+            ],
+            Friday: [
+                { start: "08:00", end: "08:40", code: "ISL 101", title: "Islamic Studies", room: "Auditorium", teacher: "Dept of Humanities" },
+                { start: "08:40", end: "09:20", code: "CIT 141", title: "Application Software Practical", room: "IT Lab 3", teacher: "Instructor" },
+                { start: "09:20", end: "10:00", code: "CIT 124", title: "Programming Fundamentals (Lab)", room: "Soft Lab 2", teacher: "Engr. CIT Dept" },
+                { start: "10:00", end: "10:30", code: "BREAK", title: "Friday Break", room: "Campus", teacher: "-" },
+                { start: "10:30", end: "12:00", code: "CIT 114", title: "Computer Applications Practical", room: "Comp Lab 1", teacher: "Lab Asst" }
+            ]
+        };
+
+        const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+
+        // --- 4. Timetable UI & Live Clock Engine ---
+        let selectedDay = 'Monday';
+
+        function parseTime(timeStr) {
+            const [hrs, mins] = timeStr.split(':').map(Number);
+            const d = new Date();
+            d.setHours(hrs, mins, 0, 0);
+            return d;
+        }
+
+        function updateClockAndLiveStatus() {
+            const now = new Date();
+            document.getElementById('liveClock').textContent = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+
+            const currentDayName = days[now.getDay()];
+            const daySchedule = (currentDayName === 'Friday') ? scheduleData.Friday : scheduleData.Regular;
+
+            if (currentDayName === 'Sunday') {
+                document.getElementById('liveSubjectTitle').textContent = "Weekend Break (Sunday)";
+                document.getElementById('liveSubjectDetails').textContent = "No classes scheduled for today. Campus is closed.";
+                return;
+            }
+
+            let activeFound = false;
+
+            for (let period of daySchedule) {
+                const startTime = parseTime(period.start);
+                const endTime = parseTime(period.end);
+
+                if (now >= startTime && now <= endTime) {
+                    activeFound = true;
+                    document.getElementById('liveSubjectTitle').textContent = `${period.code}: ${period.title}`;
+                    document.getElementById('liveSubjectDetails').textContent = `Room/Lab: ${period.room} | Instructor: ${period.teacher} (${period.start} - ${period.end})`;
+                    break;
+                }
+            }
+
+            if (!activeFound) {
+                document.getElementById('liveSubjectTitle').textContent = "No Active Class Session";
+                document.getElementById('liveSubjectDetails').textContent = `Current time falls outside regular lecture hours for ${currentDayName}.`;
+            }
+        }
+
+        function renderSchedule(dayName) {
+            selectedDay = dayName;
+            
+            // Update Tab Selection UI
+            document.querySelectorAll('.day-tab').forEach(tab => {
+                tab.classList.toggle('active', tab.dataset.day === dayName);
+            });
+
+            const timetableGrid = document.getElementById('timetableGrid');
+            timetableGrid.innerHTML = '';
+
+            if (dayName === 'Sunday') {
+                timetableGrid.innerHTML = `
+                    <div style="grid-column: 1/-1; text-align: center; padding: 3rem; background: var(--bg-card); border-radius: 12px; border: 1px solid var(--border-subtle);">
+                        <h3 style="color: var(--cyan-glow); margin-bottom: 0.5rem;">Holiday / Sunday</h3>
+                        <p style="color: var(--text-muted);">No academic classes scheduled on Sundays.</p>
+                    </div>`;
+                return;
+            }
+
+            const daySchedule = (dayName === 'Friday') ? scheduleData.Friday : scheduleData.Regular;
+            const now = new Date();
+            const currentDayName = days[now.getDay()];
+
+            daySchedule.forEach(period => {
+                const startTime = parseTime(period.start);
+                const endTime = parseTime(period.end);
+                const isCurrent = (dayName === currentDayName) && (now >= startTime && now <= endTime);
+
+                const card = document.createElement('div');
+                card.className = `period-card ${isCurrent ? 'is-current' : ''}`;
+                card.innerHTML = `
+                    <div class="period-time">
+                        <span>${period.start} - ${period.end}</span>
+                        ${isCurrent ? '<span style="color: var(--emerald-glow); font-weight:700;">● ACTIVE</span>' : ''}
+                    </div>
+                    <div class="period-code">${period.code}</div>
+                    <div class="period-title">${period.title}</div>
+                    <div class="period-meta">
+                        <span>👤 ${period.teacher}</span>
+                        <span class="room-badge">${period.room}</span>
+                    </div>
+                `;
+                timetableGrid.appendChild(card);
+            });
+        }
+
+        // --- 5. Initializer & Event Listeners ---
+        document.addEventListener('DOMContentLoaded', () => {
+            const now = new Date();
+            const currentDayName = days[now.getDay()];
+            const initialDay = (currentDayName === 'Sunday') ? 'Monday' : currentDayName;
+
+            renderSchedule(initialDay);
+            updateClockAndLiveStatus();
+            setInterval(updateClockAndLiveStatus, 1000);
+
+            document.getElementById('dayTabs').addEventListener('click', (e) => {
+                if (e.target.classList.contains('day-tab')) {
+                    renderSchedule(e.target.dataset.day);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
